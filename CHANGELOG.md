@@ -23,6 +23,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 - **LLMs: a model split across GPUs answers its first request with text instead of a run of zeros.**
 
+### Fixed
+
+- **LLMs: GPT-OSS-20B downloads from the catalog again.** The catalog asked Hugging Face for a filename that differs in capitalisation from the one it hosts, so the transfer failed the moment it started. Contributed in [#100](https://github.com/engeldlgado/toshllm/pull/100).
+
+- **LLMs: applying a profile brings back the GPU split it was saved with.** The snapshot left out how a model splits across cards, and vision and local-network discovery with it, so two profiles differing only in the split applied the same configuration. Contributed in [#101](https://github.com/engeldlgado/toshllm/pull/101).
+
 ## [0.87.3] - 2026-09-12
 
 ### Fixed
