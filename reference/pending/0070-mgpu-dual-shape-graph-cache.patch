@@ -6,6 +6,7 @@ Subject: [PATCH] 0070-mgpu-dual-shape-graph-cache
 ---
 
 diff --git a/ggml/include/ggml-alloc.h b/ggml/include/ggml-alloc.h
+diff --git a/ggml/include/ggml-alloc.h b/ggml/include/ggml-alloc.h
 index a7926a21a..8dd5eb08e 100644
 --- a/ggml/include/ggml-alloc.h
 +++ b/ggml/include/ggml-alloc.h
@@ -369,10 +370,10 @@ index 3e90abdc3..6c15ba3a1 100644
      if (sched == NULL) {
          return;
 diff --git a/src/llama-context.cpp b/src/llama-context.cpp
-index cbfef8eb1..e8abe2371 100644
+index cbfef8eb1..109c8910d 100644
 --- a/src/llama-context.cpp
 +++ b/src/llama-context.cpp
-@@ -601,6 +601,12 @@ void llama_context::sched_reserve() {
+@@ -601,6 +601,13 @@ void llama_context::sched_reserve() {
  
      LLAMA_LOG_DEBUG("%s: max_nodes = %zu\n", __func__, max_nodes);
  
@@ -381,19 +382,21 @@ index cbfef8eb1..e8abe2371 100644
 +    gf_res_alt.reset();
 +    sched_owner = nullptr;
 +    shape_slot  = 0;
++    shape_alt_filled = false;
 +
      gf_res_prev.reset(new llm_graph_result(max_nodes));
      gf_res_reserve.reset(new llm_graph_result(max_nodes));
  
-@@ -709,10 +715,50 @@ void llama_context::sched_reserve() {
+@@ -709,10 +716,52 @@ void llama_context::sched_reserve() {
  
      const int64_t t_end_us = ggml_time_us();
  
 +    // The second scheduler plans into the buffers just reserved, so the pair costs graph
-+    // metadata and no device memory.
++    // metadata and no device memory. Only a session that alternates between two shapes gains
++    // from it, so it is asked for: without alternation the swap below never hits.
 +    {
 +        const char * env = getenv("TOSH_MGPU_SHAPE_CACHE");
-+        if (env == nullptr || atoi(env) != 0) {
++        if (env != nullptr && atoi(env) != 0) {
 +            gf_res_alt.reset(new llm_graph_result(max_nodes));
 +            sched_alt.reset(ggml_backend_sched_new(backend_ptrs.data(), backend_buft.data(), backend_ptrs.size(),
 +                        max_nodes, false, cparams.op_offload));
@@ -425,6 +428,7 @@ index cbfef8eb1..e8abe2371 100644
 +    sched_alt.reset();
 +    gf_res_alt.reset();
 +    shape_slot = 0;
++    shape_alt_filled = false;
 +}
 +
 +void llama_context::shape_cache_invalidate() {
@@ -436,7 +440,7 @@ index cbfef8eb1..e8abe2371 100644
  void llama_context::synchronize() {
      if (!sched) {
          return;
-@@ -820,6 +866,7 @@ bool llama_context::memory_update(bool optimize) {
+@@ -820,6 +869,7 @@ bool llama_context::memory_update(bool optimize) {
          // TODO: change the mctx->apply() to return information if a graph reserve is needed
          //       reset the graph result only if the memory module did reset the scheduler
          gf_res_prev->reset();
@@ -444,36 +448,42 @@ index cbfef8eb1..e8abe2371 100644
  
          if (!mctx->apply()) {
              LLAMA_LOG_ERROR("%s: failed to apply memory update\n", __func__);
-@@ -1345,9 +1392,39 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
+@@ -1345,9 +1395,45 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
  
      // the new graph parameters
      // in order to correctly reuse a graph, it's full topology has to be uniquely determined by these parameters
 -    const auto gparams = graph_params(res, ubatch, mctx, gtype);
 +    auto gparams = graph_params(res, ubatch, mctx, gtype);
- 
--    if (!graph_reuse_disable && res->can_reuse(gparams)) {
++
 +    bool shape_reuse = !graph_reuse_disable && res->can_reuse(gparams);
 +
 +    if (!shape_reuse && sched_alt && !graph_reuse_disable) {
-+        // the active shape does not fit this batch: try the other prepared one, and when that
-+        // misses too, build into it and keep the shape that was just running
++        // the active shape does not fit this batch: try the other prepared one
 +        const bool hit = gf_res_alt->can_reuse(graph_params(gf_res_alt.get(), ubatch, mctx, gtype));
+ 
+-    if (!graph_reuse_disable && res->can_reuse(gparams)) {
++        // the swap costs a synchronize, so take it when the other shape answers, and once more
++        // to fill the second slot. Missing in both again means this session does not alternate:
++        // rebuilding the running shape in place is what it would do without the pair.
++        if (hit || !shape_alt_filled) {
++            shape_alt_filled = true;
 +
-+        // the shapes share their compute memory: nothing of the outgoing one may still be running
-+        ggml_backend_sched_synchronize(sched.get());
++            // the shapes share their compute memory: nothing of the outgoing one may still be running
++            ggml_backend_sched_synchronize(sched.get());
 +
-+        std::swap(gf_res_prev, gf_res_alt);
-+        std::swap(sched, sched_alt);
-+        shape_slot ^= 1;
-+        ggml_backend_sched_set_shape_slot(sched.get(), shape_slot);
++            std::swap(gf_res_prev, gf_res_alt);
++            std::swap(sched, sched_alt);
++            shape_slot ^= 1;
++            ggml_backend_sched_set_shape_slot(sched.get(), shape_slot);
 +
-+        res         = gf_res_prev.get();
-+        gf          = res->get_gf();
-+        gparams     = graph_params(res, ubatch, mctx, gtype);
-+        shape_reuse = hit;
++            res         = gf_res_prev.get();
++            gf          = res->get_gf();
++            gparams     = graph_params(res, ubatch, mctx, gtype);
++            shape_reuse = hit;
 +
-+        if (!hit) {
-+            ggml_backend_sched_reset_shape_slot(sched.get(), shape_slot);
++            if (!hit) {
++                ggml_backend_sched_reset_shape_slot(sched.get(), shape_slot);
++            }
 +        }
 +
 +        static const bool shape_trace = getenv("TOSH_MGPU_SHAPE_TRACE") != nullptr;
@@ -486,7 +496,7 @@ index cbfef8eb1..e8abe2371 100644
          //LLAMA_LOG_DEBUG("%s: reusing previous graph\n", __func__);
  
          // with pipeline parallelism, the previous graph_compute_async may still be running
-@@ -1377,9 +1454,25 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
+@@ -1377,9 +1463,25 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
          }
  
          if (!ggml_backend_sched_alloc_graph(sched.get(), gf)) {
@@ -515,7 +525,7 @@ index cbfef8eb1..e8abe2371 100644
          }
      }
  
-@@ -2429,6 +2522,7 @@ ggml_cgraph * llama_context::graph_reserve(
+@@ -2429,6 +2531,7 @@ ggml_cgraph * llama_context::graph_reserve(
  
      // when the scheduler is reset, we cannot reuse the old graph, so we reset the previous graph result to prevent that
      gf_res_prev->reset();
@@ -524,10 +534,10 @@ index cbfef8eb1..e8abe2371 100644
      // store the n_outputs as it is, and restore it afterwards
      // TODO: not sure if needed, might simplify in the future by removing this
 diff --git a/src/llama-context.h b/src/llama-context.h
-index bf91daa8b..571638f57 100644
+index bf91daa8b..c8ce3291d 100644
 --- a/src/llama-context.h
 +++ b/src/llama-context.h
-@@ -367,6 +367,19 @@ private:
+@@ -367,6 +367,20 @@ private:
      llm_graph_result_ptr gf_res_prev;
      llm_graph_result_ptr gf_res_reserve;
  
@@ -538,6 +548,7 @@ index bf91daa8b..571638f57 100644
 +    ggml_backend_sched_ptr sched_alt;
 +    ggml_backend_sched_t   sched_owner = nullptr; // the scheduler that owns the compute buffers
 +    int                    shape_slot  = 0;
++    bool                   shape_alt_filled = false; // whether the second slot holds a built shape
 +
 +    // Drop the second prepared shape and go back to a single scheduler.
 +    void shape_cache_disable();
