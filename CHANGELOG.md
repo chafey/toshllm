@@ -3,11 +3,11 @@
 All notable changes to ToshLLM are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.87.4] - 2026-09-16
 
 ### Improved
 
-- **LLMs: generating on a model split by tensors across the dies of a Radeon Pro Vega II Duo.** A 27B goes from 19.1 to 24.1 tokens a second on the two dies of one card, from 13.9 to 21.7 across the four dies of two cards, and from 18.9 to 23.8 with TensorMesh, with identical output.
+- **LLMs: generating on a model split by tensors across the dies of a Radeon Pro Vega II Duo.** A 27B goes from 19.1 to 24.1 tokens a second on the two dies of one card, from 13.9 to 21.7 across the four dies of two cards, and from 18.9 to 23.8 with TensorMesh, with identical output. Tables per arrangement in [Radeon Pro Vega II Duo](docs/performance/0.87.4-radeon-pro-vega-ii-duo.md).
 
 - **LLMs: a model split by tensors across two Radeon Pro Vega II Duo cards reads long prompts faster.** A 177B mixture-of-experts goes from 197 to 309 tokens a second with TensorMesh, and generates 25.3 instead of 20.3.
 
