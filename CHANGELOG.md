@@ -3,6 +3,20 @@
 All notable changes to ToshLLM are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.87.5] - 2026-09-16
+
+### Improved
+
+- **LLMs: long conversations on a model split by tensors across the dies of a Radeon Pro Vega II Duo generate faster.** At 8K of context an 8B goes from 52 to 59 tokens a second, a 14B from 38 to 41 and a 1B from 150 to 160, with the same output and memory.
+
+- **LLMs: Qwen3.8 Flash Next reads prompts and generates faster with TensorMesh.** Against the published 0.87.4 binary, the 177B model goes from 181 to 277 prompt tokens a second and from 23.5 to 25.0 generated tokens a second. The complete A/B, including the 8B and 27B models, is in [Radeon Pro Vega II Duo](docs/performance/0.87.4-radeon-pro-vega-ii-duo.md#0874-against-0875).
+
+### Fixed
+
+- **LLMs: Qwen3.8 Flash Next keeps answering correctly across repeated requests.** Its separate prediction head could work on the first request and then produce repeated zeroes. The engine now refuses that unstable path and continues with the main model instead.
+
+- **LLMs: tensor-parallel work keeps its synchronization objects and collective buffers alive until every GPU has finished with them.** This closes three lifetime and fallback gaps in the fused two-die path without changing its output.
+
 ## [0.87.4] - 2026-09-16
 
 ### Improved
