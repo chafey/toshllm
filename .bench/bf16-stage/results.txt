@@ -114,3 +114,13 @@ p2_on1 rc=0 s5=0 wall=73s ppl=[PPL = 1.4940 +/- 0.07118]
 p2_off2 rc=0 s5=0 wall=72s ppl=[PPL = 1.4937 +/- 0.07116]
 p2_on2 rc=0 s5=0 wall=73s ppl=[PPL = 1.4940 +/- 0.07118]
 === ppl2 done 09:52:29
+=== full-series recert (0001-0070+0072+0073) start 10:30:41
+fs_c1_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_c2_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_n1_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_n2_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_p512_off pp512=1554.70±5.72 s5=0
+fs_p512_on pp512=1693.60±27.39 s5=0
+fs_t128_off tg128=42.89±0.05 s5=0
+fs_t128_on tg128=42.74±0.01 s5=0
+=== full-series recert done 10:31:36 — gates: needle=YES rc=0 s5=0 everywhere; pp on>off; tg parity
