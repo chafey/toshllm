@@ -1,0 +1,189 @@
+=== bf16-stage verify start 07:50:10
+r1_off pp512=1555.78±38.30
+r1_on pp512=1705.97±43.14
+r2_off pp512=
+r2_on pp512=1686.18±65.73
+on_needle needle=[]
+on_short short=[12 * 9 = 108> EOF by user]
+off_needle needle=[]
+off_tg tg128=
+on_tg tg128=42.45±0.14
+=== bf16-stage verify done 07:59:38
+=== bf16-stage verify start 08:04:19
+r1_off pp512=1572.22±9.31
+r1_on pp512=1715.62±47.84
+r2_off pp512=
+r2_on pp512=1680.51±11.98
+on_needle needle=[]
+on_short short=[A: 108> EOF by user]
+off_needle needle=[]
+off_tg tg128=42.17±0.10
+on_tg tg128=42.13±0.01
+=== bf16-stage verify done 08:11:07
+=== bf16-stage verify start 08:18:06
+r1_off pp512=1520.50±26.47
+r1_on pp512=
+r2_off pp512=1526.45±31.68
+r2_on pp512=
+on_needle needle=[ and it doesn't seem like he's going to be able> EOF by user]
+on_short short=[]
+off_needle needle=[7352> EOF by user]
+off_tg tg128=
+on_tg tg128=42.65±0.13
+=== bf16-stage verify done 08:30:44
+=== v3 gate start 09:15:10
+c1_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+c2_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+c3_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n1_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n2_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n3_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n4_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n5_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+short_on rc=0 s5=0 needle=no out=[A: 12 * 9 => EOF by user]
+short_off rc=0 s5=0 needle=no out=[**108**> EOF by user]
+off1 pp512=32.06±0.01 s5=0
+on1 pp512=32.04±0.01 s5=0
+off2 pp512=24.31±6.79 s5=0
+on2 pp512=29.78±3.87 s5=0
+off_tg tg128=3.13±0.00 s5=0
+on_tg tg128= s5=0
+=== v3 gate done 09:29:05 — gates: every n*_on line must show needle=YES rc=0 s5=0
+=== perf2 (healthy driver recheck) start 09:31:11
+=== perf2 (healthy driver recheck) start 09:33:15
+p_off1 pp512= s5=0
+p_on1 pp512= s5=0
+p_off2 pp512= s5=0
+p_on2 pp512= s5=0
+t_off tg128= s5=0
+t_on tg128= s5=0
+=== perf2 done 09:33:15
+=== perf2 (healthy driver recheck) start 09:33:31
+p_off1 pp512=1477.26±31.85 s5=0
+p_on1 pp512=1634.78±23.89 s5=0
+p_off2 pp512=1479.99±18.13 s5=0
+p_on2 pp512=1649.77±81.85 s5=0
+t_off tg128=42.81±0.17 s5=0
+t_on tg128=42.80±0.00 s5=0
+=== perf2 done 09:34:17
+=== v4 gate (stripped build) start 09:37:56
+c1_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+c2_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+c3_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n1_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n2_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n3_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n4_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+n5_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+short_on rc=0 s5=0 needle=no out=[12 * 9 = 108> EOF by user]
+short_off rc=0 s5=0 needle=no out=[12 * 9 = **108**> EOF by user]
+=== v4 gate done 09:38:47 — gates: every n*_on needle=YES rc=0 s5=0; short_on out has 108
+=== perf3 (stripped build) start 09:38:47
+p512_off1 pp512/tg1=1494.84±57.19
+40.87±10.97 s5=0
+p512_on1 pp512/tg1=1642.81±93.22
+41.75±11.01 s5=0
+p512_off2 pp512/tg1=1500.19±34.72
+41.08±10.75 s5=0
+p512_on2 pp512/tg1=1669.52±21.69
+40.70±11.70 s5=0
+t128_off pp128/tg128=846.53±52.62
+42.93±0.13 s5=0
+t128_on pp128/tg128=875.46±6.58
+43.08±0.05 s5=0
+p2k_off1 pp2048/tg1=1407.69±25.77
+41.53±11.42 s5=0
+p2k_on1 pp2048/tg1=1539.13±4.41
+41.21±12.82 s5=0
+p2k_off2 pp2048/tg1=1399.13±15.66
+40.64±11.31 s5=0
+p2k_on2 pp2048/tg1=1526.67±6.13
+41.12±11.78 s5=0
+=== perf3 done 09:40:14
+=== ppl1 (stripped build) start 09:42:57
+ppl_off rc=0 s5=0 ppl=[]
+ppl_on rc=0 s5=0 ppl=[]
+=== ppl1 done 09:43:06
+=== ppl1 (stripped build) start 09:44:44
+ppl_off rc=0 s5=0 ppl=[0.36.415.386 I perplexity: 32.04 seconds per pass - ETA 0.36.516.880 I Final estimate: PPL = 1.4937 +/- 0.07116]
+ppl_on rc=0 s5=0 ppl=[1.12.270.918 I perplexity: 66.72 seconds per pass - ETA 1.12.371.692 I Final estimate: PPL = 1.4940 +/- 0.07118]
+=== ppl1 done 09:46:34
+=== ppl2 interleaved start 09:47:47
+p2_off1 rc=0 s5=0 wall=63s ppl=[PPL = 1.4937 +/- 0.07116]
+p2_on1 rc=0 s5=0 wall=73s ppl=[PPL = 1.4940 +/- 0.07118]
+p2_off2 rc=0 s5=0 wall=72s ppl=[PPL = 1.4937 +/- 0.07116]
+p2_on2 rc=0 s5=0 wall=73s ppl=[PPL = 1.4940 +/- 0.07118]
+=== ppl2 done 09:52:29
+=== full-series recert (0001-0070+0072+0073) start 10:30:41
+fs_c1_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_c2_off rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_n1_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_n2_on rc=0 s5=0 needle=YES out=[7352> EOF by user]
+fs_p512_off pp512=1554.70±5.72 s5=0
+fs_p512_on pp512=1693.60±27.39 s5=0
+fs_t128_off tg128=42.89±0.05 s5=0
+fs_t128_on tg128=42.74±0.01 s5=0
+=== full-series recert done 10:31:36 — gates: needle=YES rc=0 s5=0 everywhere; pp on>off; tg parity
+=== ab-0072 correctness verify start 11:31:17
+v_needle_no72_4 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_no72_5 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_no72_6 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_w72_3 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_w72_4 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_ppl_no72_a rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+v_ppl_w72_a rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+v_ppl_no72_b rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+v_ppl_w72_b rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+=== ab-0072 correctness verify done 11:37:54 — w72 must be 7352 + matching PPL
+=== ab-0072 real A/B start 11:38:57
+ab_r1_tg_no72 vals=[3.32±0.52 ] s5=0
+=== ab-0072 real A/B start 11:53:59
+ab_r1_tg_no72 vals=[32.63±0.09 ] s5=0
+ab_r1_tg_w72 vals=[43.34±0.10 ] s5=0
+ab_r1_pp_no72 vals=[1509.24±32.94 31.36±6.88 ] s5=0
+ab_r1_pp_w72 vals=[1494.93±47.21 41.86±12.34 ] s5=0
+ab_r2_tg_no72 vals=[32.70±0.09 ] s5=0
+ab_r2_tg_w72 vals=[43.06±0.02 ] s5=0
+ab_r2_pp_no72 vals=[1474.74±24.06 31.18±6.90 ] s5=0
+ab_r2_pp_w72 vals=[1519.64±25.71 40.78±10.14 ] s5=0
+ab_r3_tg_no72 vals=[32.68±0.11 ] s5=0
+ab_r3_tg_w72 vals=[43.16±0.11 ] s5=0
+ab_r3_pp_no72 vals=[1487.73±32.66 31.22±6.23 ] s5=0
+ab_r3_pp_w72 vals=[1470.67±53.39 41.18±11.79 ] s5=0
+ab_fb_no72 rc=0 fb=0 s5=0
+ab_fb_w72 rc=0 fb=0 s5=0
+=== ab-0072 real A/B done 11:55:55 — first tg value is tg128; pp pair is pp512+tg1
+=== ppl3 f16-drift on current series start 11:55:55
+p3_off1 rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+p3_on1 rc=0 s5=0 ppl=[PPL = 1.4940 +/- 0.07118]
+p3_off2 rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+p3_on2 rc=0 s5=0 ppl=[PPL = 1.4940 +/- 0.07118]
+=== ppl3 done 11:56:21
+=== ab-models start 12:12:32 (0072=b-a, 0073=c-b, pp512 then tg128)
+--- m30 Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf start 12:12:32
+m30_r1_a_no72 rc=0 vals=[1762.32±8.37 27.30±0.13 ] s5=0
+m30_r1_b_w72off rc=0 vals=[1760.24±18.64 34.59±0.06 ] s5=0
+=== ab-models2 start 12:20:33 (30B f16 retry + 2B control, 300s guard)
+m30_r1c_retry rc=0 vals=[1898.64±7.91 32.28±0.09 ] s5=0
+m02_r1_a_no72 rc=0 vals=[4084.25±711.04 59.88±0.08 ] s5=0
+m02_r1_b_w72off rc=0 vals=[4015.06±697.76 59.93±0.02 ] s5=0
+m02_r1_c_w72on rc=0 vals=[4474.57±793.76 60.17±0.08 ] s5=0
+m02_r2_a_no72 rc=0 vals=[4068.47±717.01 59.79±0.09 ] s5=0
+m02_r2_b_w72off rc=0 vals=[4057.68±715.30 60.01±0.12 ] s5=0
+m02_r2_c_w72on rc=0 vals=[4444.20±875.17 60.26±0.05 ] s5=0
+=== ab-models2 done 12:22:18
+=== ab-models 30B round2 start 12:22:36
+m30_r2_a_no72 rc=0 vals=[1768.00±18.68 27.41±0.08 ] s5=0
+m30_r2_b_w72off rc=0 vals=[1773.25±11.26 34.51±0.08 ] s5=0
+m30_r2_c_w72on rc=0 vals=[1901.46±24.40 34.52±0.04 ] s5=0
+=== ab-models 30B round2 done 12:24:52
+=== ab-qwen38 start 12:32:33 (qwen4exp 512e MoE, guard 1500s)
+m38_r1_a_no72 rc=0 vals=[291.04±1.45 20.68±0.13 ] s5=0
+m38_r1_b_w72off rc=0 vals=[640.18±25.10 21.16±0.12 ] s5=0
+m38_r1_c_w72on rc=0 vals=[655.14±18.56 21.24±0.20 ] s5=0
+=== ab-qwen38 done 15:04:10
+=== ab-qwen38 r2 start 15:04:12 (pp-anomaly repro)
+m38_r2_b_w72off rc=0 vals=[635.99±9.32 21.43±0.10 ] s5=0
+m38_r2_a_no72 rc=0 vals=[656.64±7.79 20.67±0.11 ] s5=0
+m38_r2_c_w72on rc=0 vals=[647.82±2.52 21.33±0.14 ] s5=0
+=== ab-qwen38 r2 done 15:21:34

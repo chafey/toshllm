@@ -1,0 +1,31 @@
+=== bisect start 11:51:12
+S_A_0001-0057 pp512=2978.75±61.38 tg8=26.62±0.11 
+S_B_0001-0063 pp512=1573.46±14.57 tg8=26.66±0.24 
+S_C_0001-0065 pp512=1532.67±28.57 tg8=32.47±0.20 
+S_D_57plus0063 APPLY_FAIL 0063
+S_E_57plus59-62 pp512=1571.54±8.41 tg8=26.63±0.12 
+=== bisect done 11:57:18
+=== run2 start 11:57:31
+S_F_0001-0062 pp512=1569.52±7.15 tg8=26.62±0.20 
+S_G_57plus59-63 pp512=1579.03±7.84 tg8=26.56±0.14 
+=== run2 done 11:59:30
+=== run3 start 12:04:47
+H1_57plus0059 pp512=1554.55±26.02 tg8=26.77±0.21 
+H2_57plus0059-60 pp512=1574.98±5.99 tg8=26.74±0.21 
+H3_57plus0059-61 pp512=1566.84±14.66 tg8=26.59±0.20 
+=== run3 done 12:07:45
+=== run4 start 12:14:34
+S_A_pre0059 pp512=3141.96±13.48 needle_out=[7, and is repeated numerous times throughout the passage, in]
+H1_with0059 pp512=1566.92±4.30 needle_out=[7352> EOF by user]
+=== run4 done 12:16:55
+=== run5 start 12:17:17
+H1_current shortprompt_out=[12 * 9 = **108**> EOF by user]
+S_A_pre0059 shortprompt_out=[A: 108> EOF by user]
+=== run5 done 12:18:26
+=== run6 start 12:19:31
+S_A_pre0059 run1 needle_out=[7. The security code is 7352.> EOF by user]
+S_A_pre0059 run2 needle_out=[7. The security code mentioned at the very beginning of the>]
+S_A_pre0059 run3 needle_out=[7 7352> EOF by user]
+H1_with0059 run1 needle_out=[7352> EOF by user]
+H1_with0059 run2 needle_out=[7352> EOF by user]
+=== run6 done 12:21:00
