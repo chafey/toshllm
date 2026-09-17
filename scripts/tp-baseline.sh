@@ -18,7 +18,7 @@ set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 BIN="$ROOT/vendor/llama.cpp/build-static/bin/llama-bench"
 SERVER="$ROOT/vendor/llama.cpp/build-static/bin/llama-server"
-MODEL="${TOSH_MODEL:-/Users/chafey/models/GLM-4-9B-0414-Q4_K_M.gguf}"
+MODEL="${TOSH_MODEL:-$HOME/models/GLM-4-9B-0414-Q4_K_M.gguf}"
 OUT="${1:-$ROOT/.bench/tp-baseline-2026-09-11}"
 mkdir -p "$OUT"
 
@@ -119,7 +119,7 @@ fi
 # SOLO Qwen rows deliberately omitted: 20.9 GiB does not fit one die -> CPU-offloaded decode
 # at ~2.2 t/s AND a ~16 min stall in early init before load_model even starts (observed
 # 2026-09-16). The comparison that answers the question is TP4 none-vs-dflash.
-QWEN="${TOSH_MODEL_QWEN:-/Users/chafey/models/Qwen3.6-35B-A3B-UD-Q4_K_S.gguf}"
+QWEN="${TOSH_MODEL_QWEN:-$HOME/models/Qwen3.6-35B-A3B-UD-Q4_K_S.gguf}"
 DFLASH="${QWEN%.gguf}.dflash.gguf"
 if [[ -f "$QWEN" && -f "$DFLASH" ]]; then
     SPEC_MODEL="$QWEN"
