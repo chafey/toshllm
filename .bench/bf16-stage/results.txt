@@ -177,3 +177,13 @@ m30_r2_a_no72 rc=0 vals=[1768.00±18.68 27.41±0.08 ] s5=0
 m30_r2_b_w72off rc=0 vals=[1773.25±11.26 34.51±0.08 ] s5=0
 m30_r2_c_w72on rc=0 vals=[1901.46±24.40 34.52±0.04 ] s5=0
 === ab-models 30B round2 done 12:24:52
+=== ab-qwen38 start 12:32:33 (qwen4exp 512e MoE, guard 1500s)
+m38_r1_a_no72 rc=0 vals=[291.04±1.45 20.68±0.13 ] s5=0
+m38_r1_b_w72off rc=0 vals=[640.18±25.10 21.16±0.12 ] s5=0
+m38_r1_c_w72on rc=0 vals=[655.14±18.56 21.24±0.20 ] s5=0
+=== ab-qwen38 done 15:04:10
+=== ab-qwen38 r2 start 15:04:12 (pp-anomaly repro)
+m38_r2_b_w72off rc=0 vals=[635.99±9.32 21.43±0.10 ] s5=0
+m38_r2_a_no72 rc=0 vals=[656.64±7.79 20.67±0.11 ] s5=0
+m38_r2_c_w72on rc=0 vals=[647.82±2.52 21.33±0.14 ] s5=0
+=== ab-qwen38 r2 done 15:21:34

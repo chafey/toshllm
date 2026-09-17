@@ -452,3 +452,23 @@ OFF controls first, abort if the driver looks poisoned (everything ~50x slow, no
   item 6 backlog (vec4 f16 transport, default-on wider validation) and optionally
   reproducing the MoE f16-ON init hang (loop the ON arm with TOSH_MGPU_TRACE=1; do NOT
   quote traced tg numbers as perf).
+
+## Thread 9 (2026-09-17): Qwen3.8-Flash-Next (qwen4exp, 103 GB hybrid MoE) cross-check
+- User asked whether 0072/0073 help Qwen3.8-Flash-Next-UD-Q4_K_XL (arch qwen4exp: 512-expert
+  MoE, A10, 48 layers, SSM/linear-attn 3-of-4 + full-attn 1-of-4 + attention indexer; 4 shards,
+  ~103 GB; fits TP4 = 4x32 GB). Pinned tree HAS qwen4exp support incl. tensor-split segmenting
+  for its SSM heads (llama-model.cpp QWEN4EXP branches). 6/6 arms rc=0, s5=0; load ~6-8 min/arm.
+- Results (rows "=== ab-qwen38*"): r2 (clean): no72 pp 656.64/tg 20.67; w72off pp 635.99/tg 21.43
+  (+3.7 % tg, pp within noise); f16-ON pp 647.82 (+1.9 % vs b), tg parity. r1: b/c agree with r2
+  (640.18/21.16; 655.14/21.24; +2.3 % ON pp). r1-a (pp 291.04) IS CONTAMINATED - it ran inside a
+  DarkWake power window (pmset log; tg was unaffected: 20.68 ~= 20.67). Do not quote r1-a pp.
+- VERDICT for this model: 0072 decode +2..4 % (small, vs +26 % on 30B MoE - this model's decode
+  is much sparser A10); 0073 (knob OFF => zero effect by default) gives pp +2 % when ON. No f16-ON
+  init hang on this model (3 ON runs).
+- MACHINE PITFALL FOUND: Mac Pro is doing maintenance/DarkWake sleep cycles (Charge:0%, energy
+  saver ON). It froze the m38 r1 suite for ~2 h AND can deflate pp500 numbers (pp = collective/
+  fabric sensitive; tg bandwidth-bound was unaffected). ALWAYS run suites under
+  `nohup caffeinate -is -t N &` and verify no 'Entering Sleep' in `pmset -g log` mid-suite.
+  Also: llama-bench does NOT accept -t 0 (threadpool segfault; that flag is llama-completion-only);
+  solo probe = DEVICE_LIST=1 WITHOUT -sm tensor and WITH TOSH_FA_AMD=1 (else 599 not 993; with
+  -sm tensor + 1 device => intentional abort per PR 17869).
