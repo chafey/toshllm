@@ -124,3 +124,38 @@ fs_p512_on pp512=1693.60±27.39 s5=0
 fs_t128_off tg128=42.89±0.05 s5=0
 fs_t128_on tg128=42.74±0.01 s5=0
 === full-series recert done 10:31:36 — gates: needle=YES rc=0 s5=0 everywhere; pp on>off; tg parity
+=== ab-0072 correctness verify start 11:31:17
+v_needle_no72_4 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_no72_5 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_no72_6 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_w72_3 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_needle_w72_4 rc=0 s5=0 needle=YES out=[7352> EOF by user]
+v_ppl_no72_a rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+v_ppl_w72_a rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+v_ppl_no72_b rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+v_ppl_w72_b rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+=== ab-0072 correctness verify done 11:37:54 — w72 must be 7352 + matching PPL
+=== ab-0072 real A/B start 11:38:57
+ab_r1_tg_no72 vals=[3.32±0.52 ] s5=0
+=== ab-0072 real A/B start 11:53:59
+ab_r1_tg_no72 vals=[32.63±0.09 ] s5=0
+ab_r1_tg_w72 vals=[43.34±0.10 ] s5=0
+ab_r1_pp_no72 vals=[1509.24±32.94 31.36±6.88 ] s5=0
+ab_r1_pp_w72 vals=[1494.93±47.21 41.86±12.34 ] s5=0
+ab_r2_tg_no72 vals=[32.70±0.09 ] s5=0
+ab_r2_tg_w72 vals=[43.06±0.02 ] s5=0
+ab_r2_pp_no72 vals=[1474.74±24.06 31.18±6.90 ] s5=0
+ab_r2_pp_w72 vals=[1519.64±25.71 40.78±10.14 ] s5=0
+ab_r3_tg_no72 vals=[32.68±0.11 ] s5=0
+ab_r3_tg_w72 vals=[43.16±0.11 ] s5=0
+ab_r3_pp_no72 vals=[1487.73±32.66 31.22±6.23 ] s5=0
+ab_r3_pp_w72 vals=[1470.67±53.39 41.18±11.79 ] s5=0
+ab_fb_no72 rc=0 fb=0 s5=0
+ab_fb_w72 rc=0 fb=0 s5=0
+=== ab-0072 real A/B done 11:55:55 — first tg value is tg128; pp pair is pp512+tg1
+=== ppl3 f16-drift on current series start 11:55:55
+p3_off1 rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+p3_on1 rc=0 s5=0 ppl=[PPL = 1.4940 +/- 0.07118]
+p3_off2 rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
+p3_on2 rc=0 s5=0 ppl=[PPL = 1.4940 +/- 0.07118]
+=== ppl3 done 11:56:21

@@ -405,3 +405,21 @@ parity, needle 5/5, PPL drift +0.02 %. Pick the next upside from Thread 5 item 6
 transport, default-on validation sweep, or the 35B-TP4 dflash blocker). Machine: Mac Pro,
 4 W6800X dies, GGML_METAL_DEVICE_LIST=1,2,3,4; run long suites under nohup and poll;
 OFF controls first, abort if the driver looks poisoned (everything ~50x slow, no errors)."
+
+## Thread 6 (2026-09-17): full-series recert after fork sync; patch 0072 delta re-measured on current main
+- Fork main synced to upstream 0.87.5 (history was REWRITTEN upstream - update local main with
+  fetch+reset, never merge). Feature branch feature/0073-f16-allreduce-transport rebased onto it
+  (new hashes) + recert commits pushed. PR body prepared (template-conformant).
+- Full current series = 0001-0070 + 0072 + 0073 (69 patches, pin 465e49b9c unchanged). All apply
+  with plain git apply; engine builds clean; recert on that binary: knob f16 = pp512
+  1554.7->1693.6 (+8.9 %), tg128 parity, needle 4/4, PPL off 1.4937 vs on 1.4940 (+0.02 %).
+  Rows: "=== full-series recert" + "=== ppl3".
+- 0072 A/B on the CURRENT series (new binaries .bench/ab0072-main (no 0072/0073) vs
+  .bench/apply-check-0073): TP4 decode tg128 (-p 0 -n 128) 32.63/32.70/32.68 -> 43.34/43.06/43.16
+  (+32 %); pp512 1491 vs 1495 (UNCHANGED, matching the original RESULTS.md note); PPL bit-identical
+  1.4937; needles correct in both arms. The 09-16 "28.3 -> 37.9" absolute numbers were
+  background-load-polluted; use 32.7 -> 43.2 going forward. "fell back to the generic butterfly"
+  trace string no longer exists in either series - the fb=0 metric from ab0072-decode.sh is
+  meaningless, ignore it.
+- Driver had a brief degraded window ~11:38-11:45 (solo pp512 16 t/s, no errors); it self-healed
+  in <7 min this time. Contaminated row: ab_r1_tg_no72=3.32 under the 11:38:57 block - ignore.
