@@ -423,3 +423,18 @@ OFF controls first, abort if the driver looks poisoned (everything ~50x slow, no
   meaningless, ignore it.
 - Driver had a brief degraded window ~11:38-11:45 (solo pp512 16 t/s, no errors); it self-healed
   in <7 min this time. Contaminated row: ab_r1_tg_no72=3.32 under the 11:38:57 block - ignore.
+
+## Thread 7 (2026-09-17): cross-model A/B + upstream PR engeldlgado/toshllm#104
+- Upstream PR opened from feature/0073-upstream (slim: patches+docs+scripts only, no .bench;
+  tp-baseline.sh paths made $HOME-relative). Fork PR chafey/toshllm#1 = full record branch.
+- Cross-model perf A/B on current series (ab-models*.sh, guarded 300s, 2 rounds, pp512+tg128):
+  * Qwen3-Coder-30B-A3B-Instruct-Q4_K_M (MoE): 0072 decode tg128 27.30/27.41 -> 34.59/34.51
+    (+26 %), pp512 unchanged; 0073 pp512 1760/1773 -> 1899/1901 (+7.5 %), decode parity.
+  * Qwen3-VL-2B-Instruct-Q8_0: 0073 pp512 4015/4058 -> 4475/4444 (+10.5 %), decode parity
+    (59.9 -> 60.1); 0072 neutral (as predicted for shapes without the fallback pattern).
+  * Caveat disclosed in PR: ONE f16-ON run on the 30B hung in device init (0 % CPU, before
+    model load); not reproduced in the other 5 ON runs (traced retry + r2 both fine). If it
+    recurs: suspect comm init on MoE shapes, not the staging kernels.
+  * Do NOT quote m30_r1c_retry tg (32.28) - TOSH_MGPU_TRACE host overhead confounds decode.
+  * m30_r1_a/b + m30 r1c from ab-models.sh: r1 suite killed at r1c after the hang (see the
+    11:38-style init-silence signature; driver itself was healthy, solo 993 during).

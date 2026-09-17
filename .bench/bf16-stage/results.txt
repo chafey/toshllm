@@ -159,3 +159,21 @@ p3_on1 rc=0 s5=0 ppl=[PPL = 1.4940 +/- 0.07118]
 p3_off2 rc=0 s5=0 ppl=[PPL = 1.4937 +/- 0.07116]
 p3_on2 rc=0 s5=0 ppl=[PPL = 1.4940 +/- 0.07118]
 === ppl3 done 11:56:21
+=== ab-models start 12:12:32 (0072=b-a, 0073=c-b, pp512 then tg128)
+--- m30 Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf start 12:12:32
+m30_r1_a_no72 rc=0 vals=[1762.32±8.37 27.30±0.13 ] s5=0
+m30_r1_b_w72off rc=0 vals=[1760.24±18.64 34.59±0.06 ] s5=0
+=== ab-models2 start 12:20:33 (30B f16 retry + 2B control, 300s guard)
+m30_r1c_retry rc=0 vals=[1898.64±7.91 32.28±0.09 ] s5=0
+m02_r1_a_no72 rc=0 vals=[4084.25±711.04 59.88±0.08 ] s5=0
+m02_r1_b_w72off rc=0 vals=[4015.06±697.76 59.93±0.02 ] s5=0
+m02_r1_c_w72on rc=0 vals=[4474.57±793.76 60.17±0.08 ] s5=0
+m02_r2_a_no72 rc=0 vals=[4068.47±717.01 59.79±0.09 ] s5=0
+m02_r2_b_w72off rc=0 vals=[4057.68±715.30 60.01±0.12 ] s5=0
+m02_r2_c_w72on rc=0 vals=[4444.20±875.17 60.26±0.05 ] s5=0
+=== ab-models2 done 12:22:18
+=== ab-models 30B round2 start 12:22:36
+m30_r2_a_no72 rc=0 vals=[1768.00±18.68 27.41±0.08 ] s5=0
+m30_r2_b_w72off rc=0 vals=[1773.25±11.26 34.51±0.08 ] s5=0
+m30_r2_c_w72on rc=0 vals=[1901.46±24.40 34.52±0.04 ] s5=0
+=== ab-models 30B round2 done 12:24:52
