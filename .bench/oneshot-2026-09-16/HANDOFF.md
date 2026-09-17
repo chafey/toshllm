@@ -438,3 +438,17 @@ OFF controls first, abort if the driver looks poisoned (everything ~50x slow, no
   * Do NOT quote m30_r1c_retry tg (32.28) - TOSH_MGPU_TRACE host overhead confounds decode.
   * m30_r1_a/b + m30 r1c from ab-models.sh: r1 suite killed at r1c after the hang (see the
     11:38-style init-silence signature; driver itself was healthy, solo 993 during).
+
+## Thread 8 (2026-09-17): PR #104 body updated with cross-model results; CI green; ALL PR WORK DONE
+- PR engeldlgado/toshllm#104 body now includes the updated Models line (GLM-4-9B primary +
+  Qwen3-Coder-30B-A3B (MoE) + Qwen3-VL-2B) and the "Cross-model confirmation" validation
+  bullet (2 interleaved rounds each, numbers as in thread 7) plus the one-off MoE f16-ON
+  device-init hang disclosure. Verified landed verbatim (gh pr view body diff clean).
+- CI on #104: Build standard (x86_64) SUCCESS; Unit tests SKIPPED (no Swift diff);
+  PR MERGEABLE, base engeldlgado:main, head feature/0073-upstream.
+- Fork PR chafey/toshllm#1: OPEN, MERGEABLE, tip f31a016 (record branch, intentionally
+  divergent from the slim upstream branch).
+- REMAINING WORK: none for the PRs. If resumed, the open threads are the old thread-5
+  item 6 backlog (vec4 f16 transport, default-on wider validation) and optionally
+  reproducing the MoE f16-ON init hang (loop the ON arm with TOSH_MGPU_TRACE=1; do NOT
+  quote traced tg numbers as perf).
