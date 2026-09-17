@@ -7,3 +7,9 @@ icon-1024.png
 .DS_Store
 
 /experiments/
+
+# personal direnv config
+.envrc
+
+# benchmark scratch (worktrees, builds, logs stay local; curated records are force-added)
+.bench/
